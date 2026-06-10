@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: fast-nati-backend
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn configuration.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: CORS_ALLOW_ALL_ORIGINS
+        value: True
+      - key: PYTHON_VERSION
+        value: 3.11.0
