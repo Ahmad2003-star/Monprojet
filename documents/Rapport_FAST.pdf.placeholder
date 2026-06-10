@@ -1,0 +1,175 @@
+UNIVERSITÉ NATIONALE DES SCIENCES, TECHNOLOGIES,
+INGÉNIERIE ET MATHÉMATIQUES — UNSTIM
+Faculté des Sciences et Techniques — FAST Natitingou
+Licence 3 — Mathématiques Informatiques
+RAPPORT DE PROJET
+Plateforme Web de Gestion Académique
+FAST Natitingou — UNSTIM
+Réalisé par :
+FOUSSENI Ahamadou
+Encadreur :
+M. Bio Mourou Orou Bouyagui
+Année académique : 2024 — 2025
+
+Table des matières
+
+
+
+
+1. Introduction
+Dans le cadre de notre formation en Licence 3 Mathématiques Informatiques à la Faculté des Sciences et Techniques de Natitingou (FAST-NATI), nous avons été amenés à concevoir et développer une plateforme web de gestion académique. Ce projet vise à moderniser les processus administratifs et pédagogiques au sein de l'établissement.
+La gestion manuelle des notes, des emplois du temps et des relevés académiques représente une charge considérable pour le personnel administratif et génère souvent des erreurs ou des retards. Notre solution apporte une réponse numérique à ces problématiques en proposant une interface intuitive, sécurisée et accessible depuis n'importe quel appareil.
+1.1. Contexte et motivation
+La FAST Natitingou, composante de l'UNSTIM, accueille chaque année un nombre croissant d'étudiants dans diverses filières scientifiques. La gestion des données académiques — notes, emplois du temps, relevés — est encore largement effectuée de manière manuelle, ce qui entraîne des inefficacités importantes.
+Ce projet répond à un besoin réel exprimé par l'administration et les étudiants : disposer d'un outil centralisé, fiable et sécurisé pour la gestion des données académiques.
+1.2. Objectifs du projet
+Les objectifs principaux de ce projet sont :
+•Développer une plateforme web fullstack moderne et responsive
+•Mettre en place un système d'authentification sécurisé avec gestion des rôles
+•Permettre la saisie et la consultation des notes en temps réel
+•Générer des relevés de notes au format PDF
+•Gérer les emplois du temps et le calendrier des examens
+•Assurer la sécurité des données via JWT (JSON Web Tokens)
+
+
+2. Architecture du système
+Le système est construit selon une architecture client-serveur moderne, avec une séparation nette entre le frontend (interface utilisateur) et le backend (API REST). Cette approche garantit la scalabilité, la maintenabilité et la testabilité du code.
+2.1. Architecture générale
+L'architecture du projet suit le modèle MVC (Modèle-Vue-Contrôleur) côté backend, avec Django REST Framework. Le frontend React communique avec l'API via des requêtes HTTP sécurisées par JWT.
+Couche	Technologie	Rôle
+Frontend	React 18 + Vite	Interface utilisateur responsive
+Styles	Tailwind CSS	Design moderne et adaptatif
+API REST	Django REST Framework	Endpoints sécurisés
+Authentification	JWT (SimpleJWT)	Gestion des tokens d'accès
+Base de données	SQLite / PostgreSQL	Persistance des données
+PDF	ReportLab	Génération des relevés
+
+2.2. Structure du projet
+Le projet est organisé en deux grandes parties :
+•backend/ : Application Django avec les applications authentification et academique
+•frontend/ : Application React avec les vues par rôle (admin, enseignant, étudiant)
+•documents/ : Livrables textuels et rapport final
+2.3. Modèle de données
+Le modèle de données est structuré autour des entités suivantes :
+Modèle	Champs principaux	Relations
+Utilisateur	username, role, matricule	Base de tout le système
+Matiere	code, nom, coefficient, avec_cc	ForeignKey Utilisateur (enseignant)
+Semestre	nom, date_debut, date_fin, actif	Indépendant
+Note	note_cc, note_examen, note_finale	FK Utilisateur, Matiere, Semestre
+EmploiDuTemps	jour, heure_debut, heure_fin, salle	FK Matiere, Semestre
+EmploiDuTempsExamen	type_examen, date, salle	FK Matiere, Semestre
+
+
+
+3. Choix techniques
+3.1. Backend — Django REST Framework
+Django a été choisi pour le backend pour plusieurs raisons :
+•Maturité et robustesse : Django est un framework Python éprouvé avec une vaste communauté
+•ORM puissant : La gestion des modèles et des migrations est simplifiée
+•Django REST Framework : Facilite la création d'API REST avec sérialisation automatique
+•Sécurité intégrée : Protection CSRF, gestion des permissions, validation des données
+•Interface admin : Interface d'administration automatique pour gérer les données
+3.2. Frontend — React avec Vite
+React a été sélectionné pour le frontend pour les raisons suivantes :
+•Composants réutilisables : Architecture modulaire facilitant la maintenance
+•Virtual DOM : Performances optimales pour les mises à jour d'interface
+•Vite : Outil de build ultra-rapide avec rechargement à chaud (HMR)
+•React Router v6 : Gestion des routes avec protection par rôle
+•Axios : Client HTTP pour les appels API avec gestion des tokens JWT
+3.3. Authentification JWT
+Le système d'authentification utilise JSON Web Tokens (JWT) avec la bibliothèque djangorestframework-simplejwt. Chaque utilisateur reçoit un token d'accès (1 heure) et un token de rafraîchissement (7 jours). L'application React intercepte automatiquement les requêtes expirées et renouvelle le token sans déconnecter l'utilisateur.
+3.4. Génération de PDF
+La bibliothèque ReportLab (Python) est utilisée pour générer les relevés de notes au format PDF côté serveur. Cette approche garantit un rendu identique quel que soit l'appareil de l'utilisateur. Le PDF inclut les informations de l'étudiant, les notes par semestre avec coefficients, et la moyenne générale pondérée.
+3.5. Design responsive
+L'interface est conçue pour s'adapter à tous les types d'appareils : mobile, tablette et desktop. Sur mobile, la sidebar est masquée et accessible via un bouton hamburger. Les grilles CSS s'adaptent automatiquement au nombre de colonnes selon la largeur de l'écran.
+
+
+4. Fonctionnalités développées
+4.1. Système d'authentification et de rôles
+La plateforme implémente trois niveaux d'accès distincts :
+•Administrateur : Accès complet à toutes les fonctionnalités de gestion
+•Enseignant : Saisie des notes, consultation de l'emploi du temps
+•Étudiant : Consultation des notes, relevé PDF,consultation de l'emploi du temps, calendrier des examens
+Un système d'inscription par matricule a également été développé : l'administrateur pré-enregistre les étudiants avec leur matricule, et les étudiants créent leur compte en saisissant ce matricule.
+4.2. Gestion des notes
+Le module de gestion des notes permet :
+•La saisie des notes CC (40%) et Examen (60%) par les enseignants
+•Le calcul automatique de la moyenne pondérée côté serveur
+•La prise en charge des matières sans contrôle continu (examen seul)
+•La validation des relevés par l'administrateur
+•L'affichage de la mention (Très Bien, Bien, Assez Bien, Passable)
+4.3. Emplois du temps
+Deux types d'emplois du temps sont gérés :
+•Emploi du temps hebdomadaire : cours par jour de la semaine
+•Calendrier des examens : date, heure, salle et type (partiel/examen final)
+4.4. Génération de relevés PDF
+Les étudiants peuvent télécharger leur relevé de notes officiel en PDF depuis leur espace personnel. Le document inclut les entêtes de l'UNSTIM et de la FAST, les informations personnelles, les notes par semestre avec coefficients et la moyenne générale pondérée.
+4.5. Tableau de bord administrateur
+Le tableau de bord présente des statistiques en temps réel : nombre d'étudiants, nombre d'enseignants, notes saisies, relevés validés et taux de réussite global avec une barre de progression visuelle.
+
+
+5. Difficultés rencontrées et solutions
+Difficulté	Cause	Solution apportée
+Erreur de migration Django	Modèle Utilisateur personnalisé appliqué après les migrations par défaut	Suppression de la BDD et recréation complète des migrations
+Précision des décimales	SQLite stocke les décimaux avec des imprécisions flottantes	Utilisation du module Decimal Python avec quantize() et ROUND_HALF_UP
+CORS et téléchargement PDF	Internet Download Manager interceptait les téléchargements	Désinstallation de IDM et utilisation de window.open() avec Blob URL
+Mots de passe non hachés	Saisie directe dans le champ admin au lieu du formulaire dédié	Utilisation de set_password() via le shell Django
+Noms de fichiers avec accents	Windows ne gère pas bien les caractères spéciaux dans les noms de fichiers	Renommage des fichiers avec des noms sans accents
+JWT 401 après expiration	Token expiré sans renouvellement automatique	Intercepteur Axios pour renouveler automatiquement le token
+
+
+
+6. Jeu de test
+6.1. Comptes de test
+Rôle	Nom d'utilisateur	Mot de passe	Accès
+Administrateur	admin	••••••••	Complet
+Enseignant	enseignant1	enseignant123	Notes + EDT
+Étudiant	etudiant1	etudiant123	Consultation
+
+6.2. Scénarios de test
+Scénario 1 — Connexion et redirection par rôle :
+•Se connecter avec chaque compte et vérifier la redirection vers le bon espace
+•Vérifier que l'accès aux pages d'un autre rôle est refusé
+Scénario 2 — Saisie et consultation des notes :
+•Se connecter en tant qu'enseignant1 et ajouter une note pour etudiant1
+•Se connecter en tant qu'etudiant1 et vérifier que la note s'affiche correctement
+•Vérifier que la moyenne est calculée automatiquement (CC×40% + Examen×60%)
+Scénario 3 — Génération du relevé PDF :
+•Se connecter en tant qu'etudiant1
+•Accéder à Mes notes et cliquer sur Télécharger mon relevé PDF
+•Vérifier que le PDF s'ouvre avec les informations correctes
+Scénario 4 — Validation des relevés :
+•Se connecter en tant qu'admin
+•Accéder à Valider relevés
+•Cliquer sur un étudiant pour voir le détail de ses notes
+•Cliquer sur Valider le relevé et vérifier le changement de statut
+Scénario 5 — Inscription par matricule :
+•Créer un étudiant avec un matricule depuis l'admin Django
+•Accéder à /inscription et entrer le matricule
+•Compléter le formulaire et vérifier la création du compte
+
+
+7. Conclusion et perspectives
+Ce projet nous a permis de mettre en pratique les connaissances acquises en développement web tout au long de notre formation en Licence 3 Mathématiques Informatiques. La plateforme développée répond aux besoins fondamentaux de la gestion académique de la FAST Natitingou.
+Les compétences techniques mobilisées dans ce projet sont nombreuses : programmation Python avec Django, JavaScript React moderne, conception de base de données relationnelle, sécurisation d'API REST avec JWT, génération de documents PDF, et conception d'interfaces responsive.
+7.1. Perspectives d'amélioration
+Pour les versions futures de la plateforme, les améliorations suivantes sont envisagées :
+•Déploiement en production avec PostgreSQL et un serveur Linux
+•Système de notifications par email (résultats, convocations aux examens)
+•Tableau de bord statistique avancé avec graphiques et historiques
+•Application mobile native avec React Native
+•Intégration d'un système de messagerie interne entre enseignants et étudiants
+•Gestion des filières, des UE et des ECTS
+•Export des données en format Excel pour les archivages administratifs
+
+Bibliographie et webographie
+•Django Documentation — https://docs.djangoproject.com/
+•Django REST Framework — https://www.django-rest-framework.org/
+•React Documentation — https://react.dev/
+•React Router v6 — https://reactrouter.com/
+•djangorestframework-simplejwt — https://django-rest-framework-simplejwt.readthedocs.io/
+•ReportLab Documentation — https://www.reportlab.com/docs/
+•Axios Documentation — https://axios-http.com/
+•Vite Documentation — https://vitejs.dev/
+•Tailwind CSS — https://tailwindcss.com/
+•MDN Web Docs — https://developer.mozilla.org/
