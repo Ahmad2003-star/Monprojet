@@ -1,3 +1,8 @@
+databases:
+  - name: fast-nati-db
+    databaseName: fast_nati
+    plan: free
+
 services:
   - type: web
     name: fast-nati-backend
@@ -6,13 +11,17 @@ services:
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
     startCommand: gunicorn configuration.wsgi:application
     envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fast-nati-db
+          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
-        value: False
+        value: "False"
       - key: ALLOWED_HOSTS
         value: .onrender.com
       - key: CORS_ALLOW_ALL_ORIGINS
-        value: True
+        value: "True"
       - key: PYTHON_VERSION
         value: 3.11.0
