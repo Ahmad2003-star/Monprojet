@@ -1,11 +1,7 @@
 import axios from 'axios'
 
-// Une écriture plus simple et robuste pour la variable
-const BASE_URL_ENV = import.meta.env ? import.meta.env.VITE_API_URL : null;
-
-const API_URL = BASE_URL_ENV
-  ? `${BASE_URL_ENV}/api`
-  : 'http://127.0.0'
+// On écrit l'adresse complète et exacte de votre serveur Render
+const API_URL = 'https://onrender.com'
 
 const api = axios.create({
   baseURL: API_URL,
@@ -29,11 +25,12 @@ api.interceptors.response.use(
 
       if (refresh) {
         try {
-          const { data } = await axios.post(${API_URL}/token/refresh/, { refresh })
+          // Correction des guillemets ici pour la variable
+          const { data } = await axios.post(`${API_URL}/token/refresh/`, { refresh })
+
           localStorage.setItem('access_token', data.access)
 
-          error.config.headers.Authorization =
-            `Bearer ${data.access}`
+          error.config.headers.Authorization = `Bearer ${data.access}`
 
           return api(error.config)
         } catch {
