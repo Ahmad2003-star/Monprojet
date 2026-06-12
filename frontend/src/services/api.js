@@ -1,8 +1,11 @@
 import axios from 'axios'
 
-// L'URL de base pointera toujours vers le dossier /api du backend
-const API_URL =
-  import.meta?.env?.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://127.0.0'
+// Une écriture plus simple et robuste pour la variable
+const BASE_URL_ENV = import.meta.env ? import.meta.env.VITE_API_URL : null;
+
+const API_URL = BASE_URL_ENV
+  ? `${BASE_URL_ENV}/api`
+  : 'http://127.0.0'
 
 const api = axios.create({
   baseURL: API_URL,
