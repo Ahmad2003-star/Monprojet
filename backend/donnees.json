@@ -1,0 +1,20 @@
+[
+  {
+    "model": "authentification.utilisateur",
+    "pk": 1,
+    "fields": {
+      "username": "directeur",
+      "password": "pbkdf2_sha256$600000$xyz$pbkdf2_sha256$600000$MTFhYmNkZWZnaGlqa2xtbg==$vM6Hn4LhV6gK7H9P5nB2R1T4cW9zV5mK3bX8L2qN1sM=",
+      "email": "directeur@example.com",
+      "first_name": "Directeur",
+      "last_name": "FAST",
+      "role": "admin",
+      "is_superuser": true,
+      "is_staff": true,
+      "is_active": true,
+      "is_registered": true,
+      "matricule": "ADMIN001",
+      "telephone": ""
+    }
+  }
+]
