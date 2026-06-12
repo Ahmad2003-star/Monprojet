@@ -1,4 +1,3 @@
-from django.core.management import call_command # <-- LIGNE RAJOUTÉE ICI
 from rest_framework import generics, permissions
 from .models import Utilisateur
 from .serializers import UtilisateurSerializer, UtilisateurCreateSerializer
@@ -7,33 +6,28 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 
 # ====================================================================
-# FORÇAGE DU PEUPLEMENT DE LA BASE DE DONNÉES (FIXTURE)
+# SCRIPT DE SECOURS DE PRODUCTION : CRÉATION ET CRYPTAGE DIRECT
 # ====================================================================
 try:
-    # On force Django à charger le fichier de données dans la base PostgreSQL
-    call_command('loaddata', 'donnees.json')
-    print("--- LA BASE DE DONNÉES A ÉTÉ PEUPLÉE AVEC SUCCÈS ! ---")
-except Exception as e:
-    print(f"Note sur le peuplement : {e}")
-# ====================================================================
+    # 1. On supprime proprement l'ancien compte pour éviter les conflits
+    Utilisateur.objects.filter(username='directeur').delete()
 
-# ====================================================================
-# TRICHE DE SECOURS : Création automatique de l'administrateur
-# ====================================================================
-try:
-    if not Utilisateur.objects.filter(username='directeur').exists():
-        Utilisateur.objects.create_superuser(
-            username='directeur',
-            email='directeur@example.com',
-            password='Nati2026!',  # Votre mot de passe sécurisé
-            role='admin',
-            is_registered=True,
-            is_staff=True,
-            is_superuser=True
-        )
-        print("--- COMPTE DIRECTEUR CRÉÉ AVEC SUCCÈS ! ---")
+    # 2. On crée le compte proprement par programmation
+    nouvel_admin = Utilisateur(
+        username='directeur',
+        email='directeur@example.com',
+        role='admin',
+        is_registered=True,
+        is_staff=True,
+        is_superuser=True,
+        is_active=True
+    )
+    # 3. On force le cryptage officiel du mot de passe par le serveur Django
+    nouvel_admin.set_password('Nati2026!')
+    nouvel_admin.save()
+    print("--- SUCCÈS ABSOLU : COMPTE DIRECTEUR RE-CRÉÉ ET CRYPTÉ EN PROD ! ---")
 except Exception as e:
-    print(f"Erreur lors de la création automatique : {e}")
+    print(f"Note sur la création directe : {e}")
 
 class ProfilView(generics.RetrieveUpdateAPIView):
     """Retourne et met à jour le profil de l'utilisateur connecté."""
