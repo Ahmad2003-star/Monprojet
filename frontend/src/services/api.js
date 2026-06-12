@@ -1,9 +1,8 @@
 import axios from 'axios'
 
-// On retire le "/api" de secours pour s'aligner sur la racine de Render
+// L'URL de base pointera toujours vers le dossier /api du backend
 const API_URL =
-  import.meta?.env?.VITE_API_URL ||
-  'http://127.0.0.1:8000'
+  import.meta?.env?.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://127.0.0'
 
 const api = axios.create({
   baseURL: API_URL,
@@ -27,11 +26,7 @@ api.interceptors.response.use(
 
       if (refresh) {
         try {
-          const { data } = await axios.post(
-            `${API_URL}/token/refresh/`,
-            { refresh }
-          )
-
+          const { data } = await axios.post(${API_URL}/token/refresh/, { refresh })
           localStorage.setItem('access_token', data.access)
 
           error.config.headers.Authorization =
