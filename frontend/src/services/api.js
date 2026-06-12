@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-// On écrit l'adresse complète et exacte de votre serveur Render
+// On met la vraie URL de votre API Django qui est en ligne
 const API_URL = 'https://onrender.com'
 
 const api = axios.create({
@@ -25,7 +25,6 @@ api.interceptors.response.use(
 
       if (refresh) {
         try {
-          // Correction des guillemets ici pour la variable
           const { data } = await axios.post(`${API_URL}/token/refresh/`, { refresh })
 
           localStorage.setItem('access_token', data.access)
