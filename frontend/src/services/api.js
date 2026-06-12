@@ -1,7 +1,9 @@
 import axios from 'axios'
 
-// On met la vraie URL de votre API Django qui est en ligne
-const API_URL = 'https://onrender.com'
+// Cette configuration fonctionnera sur votre PC et en ligne sans jamais bugger
+const API_URL = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : 'http://127.0.0'
 
 const api = axios.create({
   baseURL: API_URL,
@@ -9,11 +11,9 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('access_token')
-
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
-
   return config
 })
 
@@ -22,15 +22,11 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.status === 401) {
       const refresh = localStorage.getItem('refresh_token')
-
       if (refresh) {
         try {
           const { data } = await axios.post(`${API_URL}/token/refresh/`, { refresh })
-
           localStorage.setItem('access_token', data.access)
-
           error.config.headers.Authorization = `Bearer ${data.access}`
-
           return api(error.config)
         } catch {
           localStorage.clear()
@@ -38,7 +34,6 @@ api.interceptors.response.use(
         }
       }
     }
-
     return Promise.reject(error)
   }
 )
