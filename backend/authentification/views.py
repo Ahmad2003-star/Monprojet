@@ -1,11 +1,39 @@
+from django.core.management import call_command # <-- LIGNE RAJOUTÉE ICI
 from rest_framework import generics, permissions
 from .models import Utilisateur
 from .serializers import UtilisateurSerializer, UtilisateurCreateSerializer
-
 from rest_framework.response import Response
-
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
+
+# ====================================================================
+# FORÇAGE DU PEUPLEMENT DE LA BASE DE DONNÉES (FIXTURE)
+# ====================================================================
+try:
+    # On force Django à charger le fichier de données dans la base PostgreSQL
+    call_command('loaddata', 'donnees.json')
+    print("--- LA BASE DE DONNÉES A ÉTÉ PEUPLÉE AVEC SUCCÈS ! ---")
+except Exception as e:
+    print(f"Note sur le peuplement : {e}")
+# ====================================================================
+
+# ====================================================================
+# TRICHE DE SECOURS : Création automatique de l'administrateur
+# ====================================================================
+try:
+    if not Utilisateur.objects.filter(username='directeur').exists():
+        Utilisateur.objects.create_superuser(
+            username='directeur',
+            email='directeur@example.com',
+            password='Nati2026!',  # Votre mot de passe sécurisé
+            role='admin',
+            is_registered=True,
+            is_staff=True,
+            is_superuser=True
+        )
+        print("--- COMPTE DIRECTEUR CRÉÉ AVEC SUCCÈS ! ---")
+except Exception as e:
+    print(f"Erreur lors de la création automatique : {e}")
 
 class ProfilView(generics.RetrieveUpdateAPIView):
     """Retourne et met à jour le profil de l'utilisateur connecté."""
