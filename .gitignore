@@ -17,7 +17,6 @@ backend/staticfiles/
 # Node
 node_modules/
 frontend/dist/
-frontend/.env
 
 # Divers
 .DS_Store
