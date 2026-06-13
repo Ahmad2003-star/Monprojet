@@ -1,9 +1,5 @@
 import axios from 'axios'
-
-// Cette configuration fonctionnera sur votre PC et en ligne sans jamais bugger
-const API_URL = import.meta.env.VITE_API_URL
-  ? `${import.meta.env.VITE_API_URL}/api`
-  : 'http://127.0.0'
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api'
 
 const api = axios.create({
   baseURL: API_URL,
