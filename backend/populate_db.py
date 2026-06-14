@@ -2,7 +2,10 @@
 Script de peuplement de la base de données — FAST Natitingou
 Usage : python manage.py shell < populate_db.py
 """
-
+import os
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'configuration.settings')
+django.setup()
 from authentification.models import Utilisateur
 from academique.models import (
     Filiere, Niveau, Option, Matiere, Semestre, Note,
