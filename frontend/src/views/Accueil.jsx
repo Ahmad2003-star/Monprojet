@@ -11,37 +11,41 @@ export default function Accueil() {
     <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f5f7fa', color: '#333', margin: 0 }}>
 
       {/* HEADER */}
-      <header id="accueil" style={{ backgroundColor: '#0b3d91', color: 'white', padding: '20px', textAlign: 'center', position: 'relative' }}>
-        <img src="/images/0 2.png" alt="Logo UNSTIM" style={{ position: 'absolute', top: 15, left: 10, width: 80, height: 80, objectFit: 'contain', backgroundColor: 'white', borderRadius: 8 }} />
-        <img src="/images/img_logoFAST-NATI.jpg" alt="Logo FAST" style={{ position: 'absolute', top: 15, right: 10, width: 80, height: 80, objectFit: 'contain', borderRadius: 8 }} />
-        <h1 style={{ margin: 0, fontSize: 28 }}>FAST Natitingou</h1>
-        <p style={{ margin: '8px 0 0' }}>Plateforme Web de Gestion Académique</p>
+      <header id="accueil" style={{ backgroundColor: '#0b3d91', color: 'white', padding: '20px', textAlign: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 12, flexWrap: 'wrap' }}>
+            <img src="/images/0 2.png" alt="Logo UNSTIM" style={{ width: 70, height: 70, objectFit: 'contain', backgroundColor: 'white', borderRadius: 8, flexShrink: 0 }} />
+            <div>
+                <h1 style={{ margin: 0, fontSize: 'clamp(18px, 4vw, 28px)' }}>FAST Natitingou</h1>
+                <p style={{ margin: '6px 0 0', fontSize: 'clamp(12px, 2.5vw, 15px)', opacity: 0.9 }}>Plateforme Web de Gestion Académique</p>
+            </div>
+           <img src="/images/img_logoFAST-NATI.jpg" alt="Logo FAST" style={{ width: 70, height: 70, objectFit: 'contain', borderRadius: 8, flexShrink: 0 }} />
+        </div>
       </header>
 
       {/* NAV */}
-      <nav style={{ backgroundColor: '#082c6c', padding: '12px', textAlign: 'center', position: 'sticky', top: 0, zIndex: 100 }}>
-        {[
-          { label: 'Accueil', id: 'accueil' },
-          { label: 'À propos', id: 'apropos' },
-          { label: 'Fonctionnalités', id: 'fonctionnalites' },
-          { label: 'Aide', id: 'aide' },
-          { label: 'Contact', id: 'contact' },
-        ].map(({ label, id }) => (
-          <button
-            key={id}
-            onClick={() => scrollTo(id)}
-            style={{ color: 'white', background: 'none', border: 'none', margin: '0 12px', fontWeight: 'bold', cursor: 'pointer', fontSize: 14 }}
-          >
-            {label}
-          </button>
-        ))}
-        <button
-          onClick={() => navigate('/login')}
-          style={{ color: '#0b3d91', backgroundColor: 'white', border: 'none', borderRadius: 4, padding: '6px 18px', marginLeft: 15, fontWeight: 'bold', cursor: 'pointer', fontSize: 14 }}
-        >
-          Connexion
-        </button>
-      </nav>
+      <nav style={{ backgroundColor: '#082c6c', padding: '10px 8px', textAlign: 'center', position: 'sticky', top: 0, zIndex: 100, flexWrap: 'wrap', display: 'flex', justifyContent: 'center', gap: 4 }}>
+  {[
+    { label: 'Accueil', id: 'accueil' },
+    { label: 'À propos', id: 'apropos' },
+    { label: 'Fonctionnalités', id: 'fonctionnalites' },
+    { label: 'Aide', id: 'aide' },
+    { label: 'Contact', id: 'contact' },
+  ].map(({ label, id }) => (
+    <button
+      key={id}
+      onClick={() => scrollTo(id)}
+      style={{ color: 'white', background: 'none', border: 'none', padding: '6px 8px', fontWeight: 'bold', cursor: 'pointer', fontSize: 'clamp(11px, 2.5vw, 14px)' }}
+    >
+      {label}
+    </button>
+  ))}
+  <button
+    onClick={() => navigate('/login')}
+    style={{ color: '#0b3d91', backgroundColor: 'white', border: 'none', borderRadius: 4, padding: '6px 14px', fontWeight: 'bold', cursor: 'pointer', fontSize: 'clamp(11px, 2.5vw, 14px)' }}
+  >
+    Connexion
+  </button>
+</nav>
 <img src="/images/images.webp" alt="bannière" style={{ width: '100%', height: '15px', display: 'block' }} />
       {/* HERO */}
       <section style={{ textAlign: 'center', padding: '70px 20px', backgroundColor: '#e8f0fe' }}>
