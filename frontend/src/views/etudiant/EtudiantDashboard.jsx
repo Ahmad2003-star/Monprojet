@@ -19,15 +19,16 @@ export default function EtudiantDashboard() {
   const ajournes = notes.filter(n => n.note_finale < 10 && n.note_finale !== null).length
 
   const telechargerReleve = () => {
-    const token = localStorage.getItem('access_token')
-    const url = `http://localhost:8000/api/academique/releve/${user.id}/`
-    fetch(url, { headers: { Authorization: `Bearer ${token}` } })
-      .then(res => res.blob())
-      .then(blob => {
-        const pdfUrl = window.URL.createObjectURL(blob)
-        window.open(pdfUrl, '_blank')
-      })
-  }
+  const token = localStorage.getItem('access_token')
+  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+  const url = `${baseUrl}/academique/releve/${user.id}/`
+  fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+    .then(res => res.blob())
+    .then(blob => {
+      const pdfUrl = window.URL.createObjectURL(blob)
+      window.open(pdfUrl, '_blank')
+    })
+}
 
   const cards = [
     { label: 'Matières', value: notes.length, icon: BookOpen, color: '#0b3d91', bg: '#e8f0fe' },
