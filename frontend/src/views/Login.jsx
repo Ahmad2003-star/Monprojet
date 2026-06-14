@@ -195,7 +195,7 @@ useEffect(() => {
       }}
     >
       <img
-        src="/images/0-2.png"
+        src="/images/0 2.png"
         alt="UNSTIM"
         style={{
           width: 60,
