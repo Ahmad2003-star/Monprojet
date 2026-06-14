@@ -11,16 +11,16 @@ export default function Accueil() {
     <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f5f7fa', color: '#333', margin: 0 }}>
 
       {/* HEADER */}
-      <header id="accueil" style={{ backgroundColor: '#0b3d91', color: 'white', padding: '20px', textAlign: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 12, flexWrap: 'wrap' }}>
+      <header id="accueil" style={{ backgroundColor: '#0b3d91', color: 'white', padding: '16px 20px', textAlign: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 800, margin: '0 auto' }}>
             <img src="/images/0 2.png" alt="Logo UNSTIM" style={{ width: 70, height: 70, objectFit: 'contain', backgroundColor: 'white', borderRadius: 8, flexShrink: 0 }} />
-            <div>
-                <h1 style={{ margin: 0, fontSize: 'clamp(18px, 4vw, 28px)' }}>FAST Natitingou</h1>
-                <p style={{ margin: '6px 0 0', fontSize: 'clamp(12px, 2.5vw, 15px)', opacity: 0.9 }}>Plateforme Web de Gestion Académique</p>
+            <div style={{ flex: 1, padding: '0 12px' }}>
+              <h1 style={{ margin: 0, fontSize: 'clamp(16px, 4vw, 26px)', fontWeight: 'bold' }}>FAST Natitingou</h1>
+              <p style={{ margin: '4px 0 0', fontSize: 'clamp(11px, 2.5vw, 14px)', opacity: 0.9 }}>Plateforme Web de Gestion Académique</p>
             </div>
-           <img src="/images/img_logoFAST-NATI.jpg" alt="Logo FAST" style={{ width: 70, height: 70, objectFit: 'contain', borderRadius: 8, flexShrink: 0 }} />
-        </div>
-      </header>
+            <img src="/images/img_logoFAST-NATI.jpg" alt="Logo FAST" style={{ width: 70, height: 70, objectFit: 'contain', borderRadius: 8, flexShrink: 0 }} />
+          </div>
+       </header>
 
       {/* NAV */}
       <nav style={{ backgroundColor: '#082c6c', padding: '10px 8px', textAlign: 'center', position: 'sticky', top: 0, zIndex: 100, flexWrap: 'wrap', display: 'flex', justifyContent: 'center', gap: 4 }}>
