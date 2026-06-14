@@ -1,4 +1,5 @@
-import { useState } from 'react'
+
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { login, getProfil } from '../services/authService'
 import { useAuth } from '../context/AuthContext'
@@ -27,56 +28,204 @@ export default function Login() {
       setLoading(false)
     }
   }
+const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+useEffect(() => {
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 768)
+  }
+
+  window.addEventListener('resize', handleResize)
+
+  return () => {
+    window.removeEventListener('resize', handleResize)
+  }
+}, [])
+
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', fontFamily: 'Arial, sans-serif' }}>
-
-      {/* Panneau gauche */}
-      <div style={{
-        flex: 1,
-        background: 'linear-gradient(135deg, #0b3d91 0%, #082c6c 60%, #051a45 100%)',
+    <div
+      style={{
+        minHeight: '100vh',
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 40,
-        color: 'white',
+        flexDirection: isMobile ? 'column' : 'row',
+        fontFamily: 'Arial, sans-serif',
       }}>
-        <div style={{ textAlign: 'center', maxWidth: 400 }}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginBottom: 30 }}>
-            <img src="/images/0 2.png" alt="UNSTIM" style={{ width: 90, height: 90, objectFit: 'contain', backgroundColor: 'white', borderRadius: 12, padding: 6 }} />
-            <img src="/images/img_logoFAST-NATI.jpg" alt="FAST" style={{ width: 90, height: 90, objectFit: 'contain', borderRadius: 12 }} />
-          </div>
-          <h1 style={{ fontSize: 28, fontWeight: 'bold', margin: '0 0 10px' }}>FAST Natitingou</h1>
-          <p style={{ fontSize: 16, opacity: 0.85, margin: '0 0 40px' }}>Plateforme Web de Gestion Académique</p>
+      {/* Panneau gauche */}
+      {!isMobile && (
+  <div
+    style={{
+      flex: 1,
+      background:
+        'linear-gradient(135deg, #0b3d91 0%, #082c6c 60%, #051a45 100%)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 40,
+      color: 'white',
+    }}
+  >
+    <div style={{ textAlign: 'center', maxWidth: 400 }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 20,
+          marginBottom: 30,
+        }}
+      >
+        <img
+          src="/images/0 2.png"
+          alt="UNSTIM"
+          style={{
+            width: 90,
+            height: 90,
+            objectFit: 'contain',
+            backgroundColor: 'white',
+            borderRadius: 12,
+            padding: 6,
+          }}
+        />
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {[
-              { emoji: '🎓', text: 'Consultation des notes et relevés' },
-              { emoji: '📅', text: 'Emploi du temps en temps réel' },
-              { emoji: '📊', text: 'Suivi académique personnalisé' },
-              { emoji: '🔒', text: 'Accès sécurisé par rôle' },
-            ].map(({ emoji, text }) => (
-              <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 12, backgroundColor: 'rgba(255,255,255,0.1)', padding: '12px 16px', borderRadius: 10 }}>
-                <span style={{ fontSize: 22 }}>{emoji}</span>
-                <span style={{ fontSize: 14, opacity: 0.9 }}>{text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <img
+          src="/images/img_logoFAST-NATI.jpg"
+          alt="FAST"
+          style={{
+            width: 90,
+            height: 90,
+            objectFit: 'contain',
+            borderRadius: 12,
+          }}
+        />
       </div>
 
-      {/* Panneau droit — formulaire */}
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f5f7fa',
-        padding: 40,
-      }}>
-        <div style={{ width: '100%', maxWidth: 420 }}>
+      <h1
+        style={{
+          fontSize: 36,
+          fontWeight: 'bold',
+          marginBottom: 15,
+        }}
+      >
+        FAST Natitingou
+      </h1>
 
+      <p
+        style={{
+          fontSize: 18,
+          opacity: 0.9,
+          marginBottom: 40,
+        }}
+      >
+        Plateforme Web de Gestion Académique
+      </p>
+
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 16,
+        }}
+      >
+        {[
+          {
+            emoji: '🎓',
+            text: 'Consultation des notes et relevés',
+          },
+          {
+            emoji: '📅',
+            text: 'Emploi du temps en temps réel',
+          },
+          {
+            emoji: '📊',
+            text: 'Suivi académique personnalisé',
+          },
+          {
+            emoji: '🔒',
+            text: 'Accès sécurisé par rôle',
+          },
+        ].map((item) => (
+          <div
+            key={item.text}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              backgroundColor: 'rgba(255,255,255,0.1)',
+              padding: 15,
+              borderRadius: 12,
+            }}
+          >
+            <span style={{ fontSize: 24 }}>
+              {item.emoji}
+            </span>
+
+            <span>{item.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+
+      {/* Panneau droit — formulaire */}
+      <div
+  style={{
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f5f7fa',
+    padding: isMobile ? 20 : 40,
+  }}>
+        <div style={{ width: '100%', maxWidth: 420 }}>
+{isMobile && (
+  <div
+    style={{
+      textAlign: 'center',
+      marginBottom: 25,
+    }}
+  >
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: 15,
+        marginBottom: 15,
+      }}
+    >
+      <img
+        src="/images/0-2.png"
+        alt="UNSTIM"
+        style={{
+          width: 60,
+          height: 60,
+          objectFit: 'contain',
+        }}
+      />
+
+      <img
+        src="/images/img_logoFAST-NATI.jpg"
+        alt="FAST"
+        style={{
+          width: 60,
+          height: 60,
+          objectFit: 'contain',
+        }}
+      />
+    </div>
+
+    <h1
+      style={{
+        color: '#0b3d91',
+        margin: 0,
+        fontSize: 24,
+      }}
+    >
+      FAST Natitingou
+    </h1>
+  </div>
+)}
           <div style={{ marginBottom: 32 }}>
             <h2 style={{ fontSize: 26, fontWeight: 'bold', color: '#0b3d91', margin: '0 0 8px' }}>Connexion</h2>
             <p style={{ color: '#666', margin: 0 }}>Accédez à votre espace personnel</p>
