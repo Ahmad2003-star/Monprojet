@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { BookOpen, Calendar, TrendingUp, Award, Download } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { getNotes } from '../../services/noteService'
@@ -6,6 +7,7 @@ import { getNotes } from '../../services/noteService'
 export default function EtudiantDashboard() {
   const { user } = useAuth()
   const [notes, setNotes] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     getNotes().then(({ data }) => setNotes(data))
@@ -19,16 +21,16 @@ export default function EtudiantDashboard() {
   const ajournes = notes.filter(n => n.note_finale < 10 && n.note_finale !== null).length
 
   const telechargerReleve = () => {
-  const token = localStorage.getItem('access_token')
-  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
-  const url = `${baseUrl}/academique/releve/${user.id}/`
-  fetch(url, { headers: { Authorization: `Bearer ${token}` } })
-    .then(res => res.blob())
-    .then(blob => {
-      const pdfUrl = window.URL.createObjectURL(blob)
-      window.open(pdfUrl, '_blank')
-    })
-}
+    const token = localStorage.getItem('access_token')
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+    const url = `${baseUrl}/academique/releve/${user.id}/`
+    fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+      .then(res => res.blob())
+      .then(blob => {
+        const pdfUrl = window.URL.createObjectURL(blob)
+        window.open(pdfUrl, '_blank')
+      })
+  }
 
   const cards = [
     { label: 'Matières', value: notes.length, icon: BookOpen, color: '#0b3d91', bg: '#e8f0fe' },
@@ -137,9 +139,12 @@ export default function EtudiantDashboard() {
           </table>
         )}
         {notes.length > 5 && (
-          <a href="/etudiant/notes" style={{ display: 'block', marginTop: 12, textAlign: 'center', color: '#0b3d91', fontSize: 14, textDecoration: 'none', fontWeight: 'bold' }}>
+          <button
+            onClick={() => navigate('/etudiant/notes')}
+            style={{ display: 'block', width: '100%', marginTop: 12, textAlign: 'center', color: '#0b3d91', fontSize: 14, fontWeight: 'bold', background: 'none', border: 'none', cursor: 'pointer' }}
+          >
             Voir toutes mes notes →
-          </a>
+          </button>
         )}
       </div>
     </div>
