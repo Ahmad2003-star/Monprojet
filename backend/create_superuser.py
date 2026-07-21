@@ -15,4 +15,12 @@ if not Utilisateur.objects.filter(username='directeur').exists():
     )
     print("Superutilisateur créé !")
 else:
-    print("Superutilisateur existe déjà.")
+    # Forcer la mise à jour du mot de passe
+    user = Utilisateur.objects.get(username='directeur')
+    user.set_password('Nati2026!')
+    user.is_superuser = True
+    user.is_staff = True
+    user.is_active = True
+    user.role = 'admin'
+    user.save()
+    print("Mot de passe mis à jour !")
